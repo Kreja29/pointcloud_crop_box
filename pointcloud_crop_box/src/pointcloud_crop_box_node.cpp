@@ -34,8 +34,11 @@ PointcloudCropBoxNode::PointcloudCropBoxNode()
 
   pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(
       params_.output_topic, 10);
+  auto qos = rclcpp::QoS(rclcpp::KeepLast(10));
+  qos.best_effort();       
+        
   sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-      params_.input_topic, 10,
+      params_.input_topic, qos,
       std::bind(&PointcloudCropBoxNode::PointcloudCallback, this,
                 std::placeholders::_1));
 
